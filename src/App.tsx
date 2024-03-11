@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import{ useState, useEffect, useRef } from "react";
 
 export default function App() {
   const [text, setText] = useState("");
@@ -26,7 +26,7 @@ export default function App() {
       .catch((error) => console.error(error));
   }, []);
 
-  const handleChange = (event) => {
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const inputText = event.target.value;
     setText(inputText);
     if (!intervalRef.current && inputText.length > 0) {
@@ -56,7 +56,7 @@ export default function App() {
     clearInterval(intervalRef.current);
   };
 
-  const textColorChanger = (index) => {
+  const textColorChanger = (index: number) => {
     if (!text[index]) return "gray";
     if (text[index] === challenge.challengeString[index]) {
       return "green";
@@ -97,8 +97,8 @@ export default function App() {
         <textarea
           name=""
           id=""
-          cols="30"
-          rows="10"
+          cols={30}
+          rows={10}
           onKeyUp={handleChange}
           autoFocus
         ></textarea>
