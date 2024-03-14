@@ -1,4 +1,4 @@
-import{ useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function App() {
   const [text, setText] = useState("");
@@ -9,6 +9,7 @@ export default function App() {
     challengeTime: 60,
   });
   const [wpm, setWpm] = useState(0);
+  const [isLoading, setIsLoading] = useState(true); // Add loading state
 
   const intervalRef = useRef(null);
 
@@ -22,8 +23,12 @@ export default function App() {
           challengeString: limitedWords,
           challengeTime: 60,
         });
+        setIsLoading(false); // Set loading state to false after fetching the text
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error(error);
+        setIsLoading(false); // Set loading state to false in case of error
+      });
   }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -74,17 +79,20 @@ export default function App() {
 
   return (
     <div>
-      <h4>
-        {challenge.challengeString.split("").map((char, index) => (
-          <span key={index} style={{ color: textColorChanger(index) }}>
-            {char}
-          </span>
-        ))}
-      </h4>
-      {timer && timer > 0 && !isCompleted && (
-        <div>
-          <p>Time Remaining: {timer} seconds</p>
-        </div>
+      {isLoading ? ( // Rendering loading message if isLoading is true
+        <p>Loading...</p>
+      ) : (
+        <h4>
+          {challenge.challengeString.split("").map((char, index) => (
+            <span
+              className="text-3xl font-bold underline"
+              key={index}
+              style={{ color: textColorChanger(index) }}
+            >
+              {char}
+            </span>
+          ))}
+        </h4>
       )}
       {isCompleted ? (
         <div>
